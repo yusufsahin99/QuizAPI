@@ -1,5 +1,6 @@
 import sqlite3
 import pandas as pd
+import os
 
 def create_database(cursor):
     sql_command = """CREATE TABLE IF NOT EXISTS qa (
@@ -42,26 +43,29 @@ def print_db(cursor):
         print(i)
         break
 
-def extract_qa_pairs(cursor, csv_path):
-    df = pd.read_csv(csv_path, delimiter=",", index_col=0)
-    for _, row in df.iterrows():
-        question = row["Questions"]
-        correct_answer = row["Correct"]
-        choice_a = row["A"]
-        choice_b = row["B"]
-        choice_c = row["C"]
-        choice_d = row["D"]
-        cursor.execute("""
-        INSERT INTO qa (subject, question, correct_answer, choice_a, choice_b, choice_c, choice_d)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, ("animals",question, correct_answer, choice_a, choice_b, choice_c, choice_d))
+def extract_qa_pairs(cursor, path):
+    for filename in os.listdir(path):
+        if filename.endswith('.csv'):
+            filepath = os.path.join(path, filename)
+            df = pd.read_csv(filepath, delimiter=",", index_col=0)
+            for _, row in df.iterrows():
+                question = row["Questions"]
+                correct_answer = row["Correct"]
+                choice_a = row["A"]
+                choice_b = row["B"]
+                choice_c = row["C"]
+                choice_d = row["D"]
+                cursor.execute("""
+                INSERT INTO qa (subject, question, correct_answer, choice_a, choice_b, choice_c, choice_d)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (filename[:-4],question, correct_answer, choice_a, choice_b, choice_c, choice_d))
     
 
 if __name__ == '__main__':
     connection = sqlite3.connect('questions_and_answers.db')
     cursor = connection.cursor()
     create_database(cursor)
-    extract_qa_pairs(cursor, "/Users/yusufsahin/QuizAPI/OpenTriviaQA/categories_csv/animals.csv")
+    extract_qa_pairs(cursor, "./csv_files/")
     connection.commit()
     print_db(cursor)
     connection.close()
