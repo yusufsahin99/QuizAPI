@@ -1,6 +1,6 @@
 # QuizAPI
 
-in create_db.py I created an SQL database from the data stored in csv files. The app.py is a flask app that manages access to the database.
+in [create_db.py] I created an SQL database from the data stored in csv files. The [app.py] is a flask app that manages access to the database.
 
 
 ## Attribution
