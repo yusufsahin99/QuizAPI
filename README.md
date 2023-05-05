@@ -1,6 +1,6 @@
 # QuizAPI
 
-In [create_db.py](create_db.py) I created an SQL database from the data stored in csv files. The [app.py](app.py) is a flask app that manages access to the SQL database.
+QuizAPI consists of an SQL database containing trivia questions and a flask app that provides a web interface to interact with the database. In [create_db.py](create_db.py) I created an SQL database from the data stored in csv files. The [app.py](app.py) is a flask app that manages access to the SQL database.
 
 
 ## Attribution
